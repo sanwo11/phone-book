@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UsePipes, ValidationPipe } from "@nestjs/common";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiProperty, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import { Request } from "express";
 import { Pagination } from "nestjs-typeorm-paginate";
 import { QueryEntities } from "./phonebook.dto";
