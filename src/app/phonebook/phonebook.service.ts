@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate";
 import { Between, Connection, getConnection, getManager, ILike, Repository } from "typeorm";
+import { QueryEntities } from "./phonebook.dto";
 import { PhoneBook } from "./phonebook.entity";
 import { PhoneBookNumber } from "./phonebooknumber.entity";
 
@@ -58,39 +59,39 @@ export class PhoneBookService{
         return paginate<PhoneBook>(this.phoneBookRepository, options);
     }
     
-    async findAll(res) {
+    async findAll(res: QueryEntities) {
         let search:object = {}
         let date:object = {}
-        if(res.query.search){
+        if(res.search){
             search = {
                 where: [
-                    { name: ILike(`${res.query.search}`) },
-                    { email: ILike(`${res.query.search}`) },
+                    { name: ILike(`${res.search}`) },
+                    { email: ILike(`${res.search}`) },
                     //{ phonobooknumber: { phoneNumber : ILike(`${res.query.search}`) } },                    
                 ]
             } 
         }
 
-        if(res.query.from && res.query.to){
+        if(res.from && res.to){
             date = { 
                 where: {
                     created_at: Between(
-                        new Date(res.query.from).toISOString(), 
-                        new Date(res.query.to).toISOString()
+                        new Date(res.from).toISOString(), 
+                        new Date(res.to).toISOString()
                     ),
                 }
             } 
         }
 
-        const page:number = res.query.page ? parseInt(res.query.page) : 1 ;
-        const limit:number = res.query.perpage ? parseInt(res.query.perpage) : 10 ;
+        const page:number = res.page ? res.page : 1 ;
+        const perpage:number = res.perpage ? res.perpage : 10 ;
 
         const option: object = { 
             relations: ["phonobooknumber"],
             ...search, 
             ...date,
             order: { name: "ASC", id: "DESC"}, 
-            skip: (page - 1), take: limit 
+            skip: (page - 1), take: perpage 
         };  
         return this.phoneBookRepository.find(option)
     }

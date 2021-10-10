@@ -2,6 +2,7 @@ import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, P
 import { ApiResponse } from "@nestjs/swagger";
 import { Request } from "express";
 import { Pagination } from "nestjs-typeorm-paginate";
+import { QueryEntities } from "./phonebook.dto";
 import { PhoneBook } from "./phonebook.entity";
 import { PhoneBookService } from "./phonebook.service";
 
@@ -32,10 +33,18 @@ export class PhoneBookController{
         });
     }
 
+    ///QueryEntities
+    /*
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+        @Query('perpage', new DefaultValuePipe(10), ParseIntPipe) perpage: number = 10,
+        @Query('search') search: string,
+        @Query('from') from: string,
+        @Query('to') to: string,
+    */
+
     @Get('')
-    async findAll(@Req() req: Request) {
-        //limit = limit > 100 ? 100 : limit;
-        return this.phonebookService.findAll(req);
+    async findAll(@Query() query: QueryEntities) {
+        return this.phonebookService.findAll(query);
     }
 
     @Get('/:id')
