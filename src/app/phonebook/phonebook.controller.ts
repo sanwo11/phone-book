@@ -33,15 +33,6 @@ export class PhoneBookController{
         });
     }
 
-    ///QueryEntities
-    /*
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-        @Query('perpage', new DefaultValuePipe(10), ParseIntPipe) perpage: number = 10,
-        @Query('search') search: string,
-        @Query('from') from: string,
-        @Query('to') to: string,
-    */
-
     @Get('')
     async findAll(@Query() query: QueryEntities) {
         return this.phonebookService.findAll(query);
